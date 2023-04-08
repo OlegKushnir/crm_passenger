@@ -1,28 +1,27 @@
-import { Outlet } from 'react-router-dom';
-import { Suspense } from 'react';
-import { useSelector } from 'react-redux';
-import { getIsLoggedIn } from '../../redux/store';
-import { UserMenu } from './UserMenu';
-import { AuthNav } from './AuthNav';
+import { Outlet } from "react-router-dom";
+import { Suspense } from "react";
+import { UserMenu } from "./UserMenu";
+import { AuthNav } from "./AuthNav";
+import { Container } from "react-bootstrap";
+import { useAuth } from "../../contexts/AuthContext";
 
 const Navigation = () => {
-  const isLoggedIn = useSelector(getIsLoggedIn)
+  const { currentUser } = useAuth();
+
   return (
     <>
-    <div>
-      <div position="static">
-        <div>
-          {isLoggedIn ? <UserMenu /> : <AuthNav/>}
+      {currentUser ? <UserMenu /> : <AuthNav />}
+
+      <Container
+        className="d-flex align-items-center justify-content-center"
+        style={{ minHeight: "100vh" }}
+      >
+        <div className="w-100" style={{ maxWidth: "400px" }}>
+          <Suspense fallback={null}>
+            <Outlet />
+          </Suspense>
         </div>
-      </div>
-    </div>
-      
-      <div>
-        <Suspense fallback={null}>
-          <Outlet />
-        </Suspense>
-        </div>
-        
+      </Container>
     </>
   );
 };
