@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+
 import {
   auth,
   googleAuthProvider,
@@ -10,8 +11,9 @@ import {
   signInWithPopup,
   signOut,
   RecaptchaVerifier,
-  signInWithPhoneNumber,
+  signInWithPhoneNumber, 
 } from "firebase/auth";
+import { createUser, getUserFirestore } from "../firebase/firestore";
 
 const AuthContext = createContext();
 
@@ -20,56 +22,78 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState();
-  const [loading, setLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [firestoreUser, setFirestoreUser] = useState(null);
 
+  const [loading, setLoading] = useState(true);
   const value = {
     currentUser,
+    firestoreUser,
     register,
     login,
     logout,
     googleLogin,
     facebookLogin,
-    recaptcha
+    recaptcha,
   };
 
-  function register(email, password) {
-    return createUserWithEmailAndPassword(auth, email, password);
+  async function register(email, password) {
+      const credentials = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+     await createUser(credentials);
   }
 
-  function login(email, password) {
-    return signInWithEmailAndPassword(auth, email, password);
+  async function login(email, password) {
+      const credentials = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      // await getUserFirestore(credentials.user.uid);
+      return credentials;
   }
+
   function logout() {
+    setCurrentUser(null);
+    setFirestoreUser(null);
     return signOut(auth);
   }
 
-  function googleLogin() {
-    const res = signInWithPopup(auth, googleAuthProvider)
-    console.log('res', res);
-    return res;
+  async function googleLogin() {
+      const credentials = await signInWithPopup(auth, googleAuthProvider);
+      await createUser(credentials);
   }
-  function facebookLogin() {
-    return signInWithPopup(auth, facebookProvider);
+  async function facebookLogin() {
+      const credentials = await signInWithPopup(auth, facebookProvider);
+      await createUser(credentials);
   }
 
-  function recaptcha(number) {
-    const recaptchaVerifier = new RecaptchaVerifier(
-      "recapcha-box",
-      {},
-      auth
-    );
+  async function recaptcha(number) {
+    const recaptchaVerifier = new RecaptchaVerifier("recapcha-box", {}, auth);
     recaptchaVerifier.render();
-    return signInWithPhoneNumber(auth, number, recaptchaVerifier)
+    return signInWithPhoneNumber(auth, number, recaptchaVerifier);
   }
 
   useEffect(() => {
+ 
+    const fetchFirestoreUser = async (uid) => {
+      if (!uid) return;
+      const res = await getUserFirestore(uid);
+      setFirestoreUser(res);
+    };
+
     const unsubscribe = auth.onAuthStateChanged((user) => {
+      fetchFirestoreUser(user?.uid);
       setCurrentUser(user);
       setLoading(false);
     });
+
     return unsubscribe;
   }, []);
+
   return (
     <AuthContext.Provider value={value}>
       {!loading && children}

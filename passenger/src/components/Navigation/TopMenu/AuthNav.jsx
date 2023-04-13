@@ -5,16 +5,8 @@ export const AuthNav = () => {
   return (
     <Navbar className="d-flex justify-content-end" bg="light" variant="light">
       <Nav className="me-auto">
-        <Nav.Link>
-          <NavLink to="register">
-            <span>Register</span>
-          </NavLink>
-        </Nav.Link>
-        <Nav.Link>
-          <NavLink to="login">
-            <span>Login</span>
-          </NavLink>
-        </Nav.Link>
+        <NavLink to="register" className="nav-link">Register</NavLink>
+        <NavLink to="login" className="nav-link">Login</NavLink>
       </Nav>
     </Navbar>
   );

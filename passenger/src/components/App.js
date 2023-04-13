@@ -1,35 +1,31 @@
 import React from "react";
 import { lazy } from "react";
 import { Route, Routes } from "react-router-dom";
-// import { useDispatch } from "react-redux";
-// import { useEffect } from "react";
-// import { fetchCurrentUser } from "../redux/auth/operations";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
-// import { getIsFetchingCurrent } from '../redux/auth/selectors';
-import Navigation from "./Navigation/Navigation";
+import Layout from "./Layout";
 import { AuthProvider } from "../contexts/AuthContext";
 
 const PhoneAuth = lazy(() => import("./Auth/PhoneAuth"));
 const Register = lazy(() => import("./Auth/Register"));
 const Login = lazy(() => import("./Auth/Login"));
-const User = lazy(() => import("./User/User"));
+const Home = lazy(() => import("./User/Home"));
+const UsersEdit = lazy(() => import("./User/UsersEdit"));
+const Trips = lazy(() => import("./User/Trips"));
+const Profile = lazy(() => import("./User/Profile"));
+const FindTrip = lazy(() => import("./User/FindTrip"));
+const Vehicles = lazy(() => import("./User/Vehicles"));
+
 
 function App() {
-  // const dispatch = useDispatch();
-  // const isFetchingCurrentUser = useSelector(getIsFetchingCurrent);
-  // useEffect(() => {
-  //   dispatch(fetchCurrentUser());
-  // }, [dispatch]);
   return (
-    // !isFetchingCurrentUser && (
     <AuthProvider>
       <Routes>
-        <Route path="/" element={<Navigation />}>
+        <Route path="/" element={<Layout />}>
           <Route
             index
             element={
-              <PublicRoute restricted redirectTo="/user">
+              <PublicRoute restricted redirectTo="/home">
                 <Login />
               </PublicRoute>
             }
@@ -46,7 +42,7 @@ function App() {
           <Route
             path="/login"
             element={
-              <PublicRoute restricted redirectTo="/user">
+              <PublicRoute restricted redirectTo="/home">
                 <Login />
               </PublicRoute>
             }
@@ -54,24 +50,40 @@ function App() {
           <Route
             path="/phonelogin"
             element={
-              <PublicRoute restricted redirectTo="/user">
+              <PublicRoute restricted redirectTo="/home">
                 <PhoneAuth />
               </PublicRoute>
             }
           />
           <Route
-            path="/user"
             element={
-              <PrivateRoute>
-                <User />
-              </PrivateRoute>
+              <PrivateRoute
+                allowedRoles={["admin", "passenger", "driver", "manager"]}
+              />
             }
-          />
+          >
+            <Route path="/home" element={<Home />}>
+              <Route path="/home/profile" element={<Profile />} />
+              <Route path="/home/findtrip" element={<FindTrip />} />
+              <Route element={<PrivateRoute allowedRoles={["admin"]} />}>
+                <Route path="/home/editusers" element={<UsersEdit />} />
+              </Route>
+              <Route
+                element={<PrivateRoute allowedRoles={["admin", "manager"]} />}
+              >
+                <Route path="/home/trips" element={<Trips />} />
+              </Route>
+              <Route
+                element={<PrivateRoute allowedRoles={["admin", "driver"]} />}
+              >
+                <Route path="/home/vehicles" element={<Vehicles />} />
+              </Route>
+            </Route>
+          </Route>
         </Route>
       </Routes>
     </AuthProvider>
   );
-  // );
 }
 
 export default App;

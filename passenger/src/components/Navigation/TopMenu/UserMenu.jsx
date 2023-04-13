@@ -1,16 +1,14 @@
-// import { useDispatch, useSelector } from 'react-redux';
-// import { getUserName } from '../../redux/auth/selectors';
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Navbar, Button, Alert } from "react-bootstrap";
 
 export const UserMenu = () => {
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { logout, currentUser } = useAuth();
-  const [userName, setUserName] = useState(null);
+  const { logout, firestoreUser} = useAuth();
+
 
   async function handleClick(event) {
     event.preventDefault();
@@ -24,21 +22,16 @@ export const UserMenu = () => {
     }
     setLoading(false);
   }
-
-  useEffect(() => {
-    if (!userName && currentUser.displayName) {
-      setUserName(currentUser.displayName);
-    }
-    // eslint-disable-next-line
-  }, []);
-
+ 
   return (
     <Navbar
       className="d-flex justify-content-between"
       bg="light"
       variant="light"
     >
-      <Navbar.Brand>{userName}</Navbar.Brand>
+      <Navbar.Brand>
+     { firestoreUser?.firstName} { firestoreUser?.lastName}
+      </Navbar.Brand>
 
       <Button
         disabled={loading}
