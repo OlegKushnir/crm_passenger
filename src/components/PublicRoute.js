@@ -6,8 +6,9 @@ export default function PublicRoute({
   restricted = false,
   redirectTo = '/'
 }) {
-  const { currentUser } = useAuth();
-  const shouldNavigate = !currentUser && restricted;
+  const { firestoreUser } = useAuth();
+  const shouldNavigate = !firestoreUser && restricted;
+
   return shouldNavigate ? children : <Navigate to={redirectTo} />
   
 }

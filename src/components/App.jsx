@@ -9,12 +9,12 @@ import { AuthProvider } from "../contexts/AuthContext";
 const PhoneAuth = lazy(() => import("./Auth/PhoneAuth"));
 const Register = lazy(() => import("./Auth/Register"));
 const Login = lazy(() => import("./Auth/Login"));
-const Home = lazy(() => import("./User/Home"));
-const UsersEdit = lazy(() => import("./User/UsersEdit"));
-const Trips = lazy(() => import("./User/Trips"));
-const Profile = lazy(() => import("./User/Profile"));
-const FindTrip = lazy(() => import("./User/FindTrip"));
-const Vehicles = lazy(() => import("./User/Vehicles"));
+const Home = lazy(() => import("./Dashboard/Home"));
+const UsersEdit = lazy(() => import("./Dashboard/UsersEdit"));
+const Trips = lazy(() => import("./Dashboard/Trips"));
+const Profile = lazy(() => import("./Dashboard/Profile"));
+const FindTrip = lazy(() => import("./Dashboard/FindTrip"));
+const Vehicles = lazy(() => import("./Dashboard/Vehicles"));
 
 
 function App() {
