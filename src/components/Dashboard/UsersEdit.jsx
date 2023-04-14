@@ -18,13 +18,19 @@ const UsersEdit = () => {
 
   return (
     <Card className="h-100">
-      <Card.Body >
-      <h3>Edit users roles</h3>
-      {err && <Alert variant="danger">{err}</Alert>}
-      {message && <Alert variant="success">{message}</Alert>}
+      <Card.Body>
+        <h3>Edit users roles</h3>
+        {err && <Alert variant="danger">{err}</Alert>}
+        {message && <Alert variant="success">{message}</Alert>}
         <Row>
           <Col>
+            <Form.Label>ID</Form.Label>
+          </Col>
+          <Col>
             <Form.Label>Email</Form.Label>
+          </Col>
+          <Col>
+            <Form.Label>Phone</Form.Label>
           </Col>
           <Col>
             <Form.Label>Role</Form.Label>
@@ -40,10 +46,9 @@ const UsersEdit = () => {
             key={index}
             setErr={setErr}
             setMessage={setMessage}
-
           />
         ))}
-       </Card.Body>
+      </Card.Body>
     </Card>
   );
 };

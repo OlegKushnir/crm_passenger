@@ -39,6 +39,7 @@ const Vehicles = () => {
     <Card className="h-100">
       <Card.Body>
         <h3>Vehicles</h3>
+        <p>To add a vehicle you must have user-drivers.</p>
         <Table striped bordered hover>
           <thead>
             <tr>

@@ -1,6 +1,6 @@
 import React from "react";
 import { lazy } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import Layout from "./Layout";
@@ -15,71 +15,37 @@ const Trips = lazy(() => import("./Dashboard/Trips"));
 const Profile = lazy(() => import("./Dashboard/Profile"));
 const FindTrip = lazy(() => import("./Dashboard/FindTrip"));
 const Vehicles = lazy(() => import("./Dashboard/Vehicles"));
-
+const roles = process.env.REACT_APP_ROLES.split(", ");
 
 function App() {
   return (
     <AuthProvider>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route
-            index
-            element={
-              <PublicRoute restricted redirectTo="/home">
-                <Login />
-              </PublicRoute>
-            }
-          />
-
-          <Route
-            path="/register"
-            element={
-              <PublicRoute restricted>
-                <Register />
-              </PublicRoute>
-            }
-          />
-          <Route
-            path="/login"
-            element={
-              <PublicRoute restricted redirectTo="/home">
-                <Login />
-              </PublicRoute>
-            }
-          />
-          <Route
-            path="/phonelogin"
-            element={
-              <PublicRoute restricted redirectTo="/home">
-                <PhoneAuth />
-              </PublicRoute>
-            }
-          />
-          <Route
-            element={
-              <PrivateRoute
-                allowedRoles={["admin", "passenger", "driver", "manager"]}
-              />
-            }
-          >
-            <Route path="/home" element={<Home />}>
-              <Route path="/home/profile" element={<Profile />} />
-              <Route path="/home/findtrip" element={<FindTrip />} />
-              <Route element={<PrivateRoute allowedRoles={["admin"]} />}>
-                <Route path="/home/editusers" element={<UsersEdit />} />
-              </Route>
-              <Route
-                element={<PrivateRoute allowedRoles={["admin", "manager"]} />}
-              >
-                <Route path="/home/trips" element={<Trips />} />
-              </Route>
-              <Route
-                element={<PrivateRoute allowedRoles={["admin", "driver"]} />}
-              >
-                <Route path="/home/vehicles" element={<Vehicles />} />
-              </Route>
+        <Route element={<PublicRoute restricted redirectTo="/home" />}>
+            <Route index element={<Login />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/phonelogin" element={<PhoneAuth />} />
+        </Route>
+        <Route element={<PrivateRoute allowedRoles={roles}/>}>
+          <Route path="/home" element={<Home />}>
+            <Route index  element={<Profile />} />
+            <Route path="/home/profile" element={<Profile />} />
+            <Route path="/home/findtrip" element={<FindTrip />} />
+            <Route element={<PrivateRoute allowedRoles={[roles[0]]} />}>
+              <Route path="/home/editusers" element={<UsersEdit />} />
+            </Route>
+            <Route element={<PrivateRoute allowedRoles={[roles[0], roles[1]]} />}>
+              <Route path="/home/trips" element={<Trips />} />
+            </Route>
+            <Route element={<PrivateRoute allowedRoles={[roles[0], roles[2]]} />}>
+              <Route path="/home/vehicles" element={<Vehicles />} />
             </Route>
           </Route>
+        </Route>
+
+        <Route path="*" element={<Navigate to="/login" />} />
         </Route>
       </Routes>
     </AuthProvider>

@@ -6,7 +6,7 @@ const Home = () => {
   return (
     <div className="d-flex">
       <SideMenu />
-      <div className="w-100">
+      <div className="w-100 m-1">
         <Suspense fallback={null}>
           <Outlet />
         </Suspense>

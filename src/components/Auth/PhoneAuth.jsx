@@ -1,21 +1,18 @@
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
-import { useRef, useState } from "react";
-import { useAuth } from "../../contexts/AuthContext";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 import { Card, Form, Button, Alert, Container } from "react-bootstrap";
-import { createUser } from "../../firebase/firestore";
 
 const PhoneAuth = () => {
-  const phoneRef = useRef();
-  const phoneMessageRef = useRef();
-  const { recaptcha, setRole } = useAuth();
+  const { recaptcha } = useAuth();
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
   const [notVerified, setNotVerified] = useState(true);
   const [number, setNumber] = useState("");
   const [confirmObj, setConfirmObj] = useState(null);
-  const [phoneMessage, setPhoneMessage] = useState(null);
+  const [phoneMessage, setPhoneMessage] = useState("");
   const navigate = useNavigate();
 
   function onChange(event) {
@@ -42,15 +39,12 @@ const PhoneAuth = () => {
     try {
       setErr("");
       setLoading(true);
-      const phoneUser = await confirmObj.confirm(phoneMessage);
-     const rolesFire = await createUser(phoneUser);
-     setRole(rolesFire);
-      navigate("/user");
+      await confirmObj.confirm(phoneMessage);
+      navigate("/home");
     } catch (error) {
       setErr(error.message);
     }
     setLoading(false);
-    setNumber("");
   }
 
   return (
@@ -70,7 +64,6 @@ const PhoneAuth = () => {
                     type="text"
                     placeholder="Enter phone number"
                     required
-                    ref={phoneRef}
                     value={number}
                     onChange={setNumber}
                   />
@@ -82,13 +75,12 @@ const PhoneAuth = () => {
               </Form>
             ) : (
               <Form onSubmit={verifyPhoneMessage}>
-                <Form.Group id="phone">
-                  <Form.Label>Enter Your Phone</Form.Label>
+                <Form.Group id="phoneverify">
+                  <Form.Label>Confirmation</Form.Label>
                   <Form.Control
                     type="text"
                     placeholder="Enter confirm code"
                     required
-                    ref={phoneMessageRef}
                     value={phoneMessage}
                     onChange={onChange}
                   />

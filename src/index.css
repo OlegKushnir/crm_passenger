@@ -17,11 +17,15 @@ code {
   50%   {opacity: 0;}
   100% {opaity:1;}
 }
+.z-2{
+  z-index: 2;
+}
+
 .menu {
   width: 50px;
-  height: calc(100vh - 56px);
+  min-height: calc(100vh - 56px);
   transition: width 1s ease-in-out;
-  background-color: #f8f9fa;
+  background-color: #343a40;
   font-size: 18px;
 }
 
@@ -31,10 +35,11 @@ code {
 .menu .item {
   opacity: 0;
   pointer-events: none;
-  color:black;
+  color:white;
 }
 .menu .item.active {
-  background-color: #eaebed;
+  background-color: #fff;
+  color: #343a40;;
 }
 .menu.opened .item {
   pointer-events:all;

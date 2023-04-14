@@ -2,8 +2,9 @@ import React from "react";
 import { Card, Form, Button, Table, Alert } from "react-bootstrap";
 import { useState, useRef } from "react";
 import { addVehicle } from "../../firebase/firestore";
-
 import { useAuth } from "../../contexts/AuthContext";
+import PropTypes from "prop-types";
+
 
 const AddVehicle = ({ showNewVehicle, drivers }) => {
   const { firestoreUser } = useAuth();
@@ -93,3 +94,14 @@ const AddVehicle = ({ showNewVehicle, drivers }) => {
 };
 
 export default AddVehicle;
+
+AddVehicle.propTypes = {
+  showNewVehicle: PropTypes.func.isRequired,
+  drivers: PropTypes.arrayOf(
+    PropTypes.shape({
+      firstName: PropTypes.string,
+      lastName: PropTypes.string,
+      uid: PropTypes.string.isRequired,
+    })
+  ).isRequired
+};

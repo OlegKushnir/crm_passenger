@@ -21,10 +21,10 @@ const Profile = () => {
   async function handleSubmit(event) {
     event.preventDefault();
     const params = {};
-    if (firstName !== profile.firstName) params.firstName = firstName;
-    if (lastName !== profile.lastName) params.lastName = lastName;
-    if (dateInput !== profile.dateOfBirth) params.dateOfBirth = dateInput;
-    if (phoneNumber !== profile.phoneNumber) params.phoneNumber = phoneNumber;
+    if (firstName && firstName !== profile.firstName) params.firstName = firstName;
+    if (lastName && lastName !== profile.lastName) params.lastName = lastName;
+    if (dateInput && dateInput !== profile.dateOfBirth) params.dateOfBirth = dateInput;
+    if (phoneNumber && phoneNumber !== profile.phoneNumber) params.phoneNumber = phoneNumber;
 
     try {
       setErr("");
@@ -59,10 +59,12 @@ const Profile = () => {
     setFirstName(firestoreUser.firstName);
     setLastName(firestoreUser.lastName);
     setDateInput(firestoreUser.dateOfBirth);
+    setPhoneNumber(firestoreUser.phoneNumber);
   }, [firestoreUser]);
+  
   return (
     <Card className="h-100">
-      <Card.Body style={{ maxWidth: "500px" }}>
+      <Card.Body style={{maxWidth: "500px"}}>
         <h2 className="text-center mb-4">Profile</h2>
         {err && <Alert variant="danger">{err}</Alert>}
         {message && <Alert variant="success">{message}</Alert>}

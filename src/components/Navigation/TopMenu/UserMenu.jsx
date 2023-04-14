@@ -25,9 +25,9 @@ export const UserMenu = () => {
  
   return (
     <Navbar
-      className="d-flex justify-content-between"
-      bg="light"
-      variant="light"
+      className="d-flex justify-content-between z-2"
+      bg="dark"
+      variant="dark"
     >
       <Navbar.Brand>
      { firestoreUser?.firstName} { firestoreUser?.lastName}

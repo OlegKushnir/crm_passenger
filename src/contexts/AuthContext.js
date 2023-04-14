@@ -11,7 +11,7 @@ import {
   signInWithPopup,
   signOut,
   RecaptchaVerifier,
-  signInWithPhoneNumber, 
+  signInWithPhoneNumber,
 } from "firebase/auth";
 import { createUser, getUserFirestore } from "../firebase/firestore";
 
@@ -38,22 +38,12 @@ export function AuthProvider({ children }) {
   };
 
   async function register(email, password) {
-      const credentials = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-     await createUser(credentials);
+    await createUserWithEmailAndPassword(auth, email, password);
   }
 
   async function login(email, password) {
-      const credentials = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      // await getUserFirestore(credentials.user.uid);
-      return credentials;
+    const credentials = await signInWithEmailAndPassword(auth, email, password);
+    return credentials;
   }
 
   function logout() {
@@ -63,12 +53,11 @@ export function AuthProvider({ children }) {
   }
 
   async function googleLogin() {
-      const credentials = await signInWithPopup(auth, googleAuthProvider);
-      await createUser(credentials);
+    await signInWithPopup(auth, googleAuthProvider);
   }
+
   async function facebookLogin() {
-      const credentials = await signInWithPopup(auth, facebookProvider);
-      await createUser(credentials);
+    await signInWithPopup(auth, facebookProvider);
   }
 
   async function recaptcha(number) {
@@ -78,15 +67,19 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
- 
-    const fetchFirestoreUser = async (uid) => {
-      if (!uid) return;
-      const res = await getUserFirestore(uid);
+    const fetchFirestoreUser = async (user) => {
+      if (!user?.uid) return;
+      const res = await getUserFirestore(user.uid);
+      if (!res) {
+        const resNone = await createUser({ user });
+        setFirestoreUser(resNone);
+        return;
+      }
       setFirestoreUser(res);
     };
 
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      fetchFirestoreUser(user?.uid);
+      fetchFirestoreUser(user);
       setCurrentUser(user);
       setLoading(false);
     });

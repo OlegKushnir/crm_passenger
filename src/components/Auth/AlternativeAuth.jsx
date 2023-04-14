@@ -2,6 +2,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { FaGoogle, FaFacebookSquare, FaPhone } from "react-icons/fa";
 import { ButtonGroup, Button } from "react-bootstrap";
+import PropTypes from 'prop-types';
 
 const AuthButtons = ({setLoading,setErr}) => {
   const { googleLogin, facebookLogin } = useAuth();
@@ -54,3 +55,8 @@ const AuthButtons = ({setLoading,setErr}) => {
   );
 };
 export default AuthButtons;
+
+AuthButtons.propTypes = {
+  setLoading: PropTypes.func.isRequired,
+  setErr: PropTypes.func.isRequired
+};

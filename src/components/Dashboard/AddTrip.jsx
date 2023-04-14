@@ -1,8 +1,9 @@
 import React from "react";
 import { Card, Form, Button, Table, Alert } from "react-bootstrap";
-import { useState, useRef} from "react";
+import { useState, useRef } from "react";
 import { addTrip } from "../../firebase/firestore";
 import { useAuth } from "../../contexts/AuthContext";
+import PropTypes from "prop-types";
 
 const AddTrip = ({ showNewTrip, drivers, vehicles }) => {
   const { currentUser } = useAuth();
@@ -15,11 +16,11 @@ const AddTrip = ({ showNewTrip, drivers, vehicles }) => {
   const [loading, setLoading] = useState(false);
   const [driver, setDriver] = useState("");
 
-  const selectedVeh = vehicles.reduce((acc, veh) => 
-  {if(veh.owner === driver) 
-    acc.push(veh); 
-    return acc},[]
-)
+  const selectedVeh = vehicles.reduce((acc, veh) => {
+    if (veh.owner === driver) acc.push(veh);
+    return acc;
+  }, []);
+
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -36,7 +37,7 @@ const AddTrip = ({ showNewTrip, drivers, vehicles }) => {
       setErr("");
       setLoading(true);
       const res = await addTrip(newTrip);
-      showNewTrip({ uid: res, ...newTrip});
+      showNewTrip({ uid: res, ...newTrip });
     } catch (e) {
       setErr("Failed to add new Trip.");
       console.log(e.message);
@@ -44,13 +45,8 @@ const AddTrip = ({ showNewTrip, drivers, vehicles }) => {
     setLoading(false);
   }
 
-
- 
-
-
-
   function handleDriver(event) {
-    setDriver(event.target.value)
+    setDriver(event.target.value);
   }
 
   return (
@@ -63,32 +59,41 @@ const AddTrip = ({ showNewTrip, drivers, vehicles }) => {
             <tbody>
               <tr>
                 <td>
-                  <Form.Control as="select" id="driver" onChange={handleDriver} required ref={driverRef}>
-                  <option value="">Driver</option>
+                  <Form.Control
+                    as="select"
+                    id="driver"
+                    onChange={handleDriver}
+                    required
+                    ref={driverRef}
+                  >
+                    <option value="">Driver</option>
                     {drivers.map((driver) => (
                       <option
                         key={driver.uid}
                         value={driver.uid}
                       >{`${driver.firstName} ${driver.lastName}`}</option>
                     ))}
-                    
                   </Form.Control>
                 </td>
                 <td>
-                  <Form.Control as="select" id="vehicle" required ref={regNumRef}>
-                  <option value="">Vehicle</option>
+                  <Form.Control
+                    as="select"
+                    id="vehicle"
+                    required
+                    ref={regNumRef}
+                  >
+                    <option value="">Vehicle</option>
                     {selectedVeh.map((veh) => (
                       <option
                         key={veh.uid}
-                        value={veh.uid}
+                        value={veh.regNum}
                       >{`${veh.brand} ${veh.regNum}`}</option>
                     ))}
-                  
                   </Form.Control>
                 </td>
                 <td>
                   <Form.Control as="select" id="from" required ref={fromRef}>
-                   <option value="">From</option>
+                    <option value="">From</option>
                     <option value="Kyiv">Kyiv</option>
                     <option value="Odesa">Odesa</option>
                     <option value="Lviv">Lviv</option>
@@ -126,3 +131,22 @@ const AddTrip = ({ showNewTrip, drivers, vehicles }) => {
 };
 
 export default AddTrip;
+
+AddTrip.propTypes = {
+  showNewTrip: PropTypes.func.isRequired,
+  drivers: PropTypes.arrayOf(
+    PropTypes.shape({
+      firstName: PropTypes.string,
+      lastName: PropTypes.string,
+      uid: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  vehicles: PropTypes.arrayOf(
+    PropTypes.shape({
+      brand: PropTypes.string.isRequired,
+      owner: PropTypes.string.isRequired,
+      regNum: PropTypes.string.isRequired,
+      uid: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+};

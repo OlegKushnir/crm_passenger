@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { Card, Form, Button, Alert, Container } from "react-bootstrap";
 import AuthButtons from "./AlternativeAuth";
-import { createUser } from "../../firebase/firestore";
+
 
 const Register = () => {
   const emailRef = useRef();
@@ -21,24 +21,21 @@ const Register = () => {
     try {
       setErr("");
       setLoading(true);
-      const credentials = await register(
+      await register(
         emailRef.current.value,
         passwordRef.current.value
       );
-      await createUser(credentials);
     } catch (error) {
       setErr(error.message);
+      console.log(error.message);
     }
     setLoading(false);
   }
 
   return (
-    <Container
-      className={"d-flex align-items-center justify-content-center"}
-      style={{ minHeight: "100vh" }}
-    >
+    <Container className={"d-flex align-items-center justify-content-center h_100"}>
       <div className="w-100" style={{ maxWidth: "400px" }}>
-        <Card>
+        <Card bg="light" className="pb-3">
           <Card.Body>
             <h2 className="text-center mb-4">Register Page</h2>
             {err && <Alert variant="danger">{err}</Alert>}

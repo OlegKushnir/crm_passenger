@@ -30,23 +30,23 @@ export async function getUserFirestore(id) {
 }
 
 export async function createUser({ user }) {
-  const userId = user.uid;
+
+  const userId = user?.uid;
   const registeredUser = {
-    firstName: user.displayName || user.email || user.uid,
+    firstName: user?.displayName || user?.email || "User",
     lastName: "",
-    email: user.email,
+    email: user?.email || "",
     dateOfBirth: "",
-    phoneNumber: user.phoneNumber,
+    phoneNumber: user?.phoneNumber || "",
     role: null,
   };
-
+  
   user?.email === process.env.REACT_APP_ADMIN_EMAIL
     ? (registeredUser.role = "admin")
     : (registeredUser.role = "passenger");
 
   try {
     await setDoc(doc(database, "users", userId), registeredUser);
-    console.log("CREATING NEW USER"); //Register user in firestore
     const resCreate = await getUserFirestore(userId);
     return resCreate;
   } catch (error) {
@@ -128,9 +128,7 @@ export async function getTripByID(id) {
     if (res.exists()) {
       const user = { uid: id, ...res.data() };
       return user;
-    } else {
-      console.log("No such trip!");
-    }
+    } 
   } catch (err) {
     console.error(err.message);
   }

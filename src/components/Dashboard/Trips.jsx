@@ -36,6 +36,7 @@ const Trips = () => {
     };
     fetchTrips();
   }, []);
+
   return (
     <Card className="h-100">
       <Card.Body >
@@ -54,15 +55,15 @@ const Trips = () => {
             </tr>
           </thead>
           <tbody>
-            {trips?.map(({ uid, driver, from, to, passengers }, index) => (
+            {trips?.map(({ uid, driver, regNum, from, to, passengers }, index) => (
               <tr key={index}>
                 <td>{uid}</td>
                 <td>
                   {drivers.find((dr) => dr.uid === driver)?.firstName || driver}
                 </td>
                 <td>
-                  {vehicles.find((vh) => vh.owner === driver)?.brand}{" "}
-                  {vehicles.find((vh) => vh.owner === driver)?.regNum}
+                  {vehicles.find((vh) => vh.regNum === regNum)?.brand}{" "}
+                  {vehicles.find((vh) => vh.regNum === regNum)?.regNum}
                 </td>
                 <td>{from}</td>
                 <td>{to}</td>
