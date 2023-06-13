@@ -32,6 +32,7 @@ function App() {
           <Route path="/home" element={<Home />}>
             <Route index  element={<Profile />} />
             <Route path="/home/profile" element={<Profile />} />
+            <Route path="/home/trips" element={<Trips />} />
             <Route path="/home/findtrip" element={<FindTrip />} />
             <Route element={<PrivateRoute allowedRoles={[roles[0]]} />}>
               <Route path="/home/editusers" element={<UsersEdit />} />
