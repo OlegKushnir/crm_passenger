@@ -1,6 +1,6 @@
 # crm_passenger
 
-env config needed:
+To start locally env config needed:
 REACT_APP_API_KEY
 REACT_APP_AUTH_DOMAIN
 REACT_APP_DB_URL
