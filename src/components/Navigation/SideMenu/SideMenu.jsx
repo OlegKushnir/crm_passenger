@@ -3,7 +3,6 @@ import { Nav } from "react-bootstrap";
 import AdminMenu from "./AdminMenu";
 import MainMenu from "./MainMenu";
 import DriverMenu from "./DriverMenu";
-import ManagerMenu from "./ManagerMenu";
 import { useAuth } from "../../../contexts/AuthContext";
 import { GiHamburgerMenu } from "react-icons/gi";
 
@@ -24,7 +23,7 @@ const SideMenu = () => {
       <MainMenu />
       {firestoreUser.role === roles[0] && <AdminMenu />}
       {firestoreUser.role === roles[2] && <DriverMenu />}
-      {firestoreUser.role === roles[1] && <ManagerMenu />}
+      {/* {firestoreUser.role === roles[1] && <ManagerMenu />} */}
     </div>
   );
 };

@@ -1,13 +1,13 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+// import { NavLink } from "react-router-dom";
 
 
 const ManagerMenu = () => {
   return (
     <>
-      <NavLink to="trips" className="nav-link item">
+      {/* <NavLink to="trips" className="nav-link item">
         Trips list
-      </NavLink>
+      </NavLink> */}
      
     </>
   );

@@ -7,6 +7,9 @@ const MainMenu = () => {
       <NavLink to="/home/profile" className="nav-link item">
         Profile
       </NavLink>
+      <NavLink to="trips" className="nav-link item">
+        Trips
+      </NavLink>
       <NavLink to="findtrip" className="nav-link item">
         Find trip
       </NavLink>
