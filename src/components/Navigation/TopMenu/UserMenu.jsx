@@ -30,7 +30,7 @@ export const UserMenu = () => {
       variant="dark"
     >
       <Navbar.Brand>
-     { firestoreUser?.firstName} { firestoreUser?.lastName}
+     { firestoreUser?.firstName} { firestoreUser?.lastName} [{ firestoreUser?.role}]
       </Navbar.Brand>
 
       <Button
